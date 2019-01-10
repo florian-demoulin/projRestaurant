@@ -2,14 +2,12 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const morgan = require('morgan')
-
 const app = express()
 app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(cors())
 
-// Connexion database
-
+// Connexion à la db
 var mongoose = require('mongoose');
 var Resto = require("../models/resto");
 mongoose.connect('mongodb://localhost:27017/restosdb');
@@ -19,7 +17,7 @@ db.once("open", function(callback){
   console.log("Succès de connexion");
 });
 
-// CREATE
+// Ajout d'un restaurant
 app.post('/addRestos', (req, res) => {
   var db = req.db;
   var borough = req.body.borough;
@@ -40,8 +38,21 @@ app.post('/addRestos', (req, res) => {
   })
 })
 
-// READ
-// Affiche tous les restos
+// Suppression d'un restaurant
+app.delete('/restos/:id', (req, res) => {
+  var db = req.db;
+  Resto.remove({
+    _id: req.params.id
+  }, function(err, resto){
+    if (err)
+      res.send(err)
+    res.send({
+      success: true
+    })
+  })
+})
+
+// Affichage de tout les restos
 app.get('/restos', (req, res) => {
   Resto.find({}, 'borough cuisine', function (error, restos) {
     if (error) { console.error(error); }
@@ -51,8 +62,7 @@ app.get('/restos', (req, res) => {
   }).sort({_id:-1})
 })
 
-// UPDATE
-// Fetch un resto cible
+//Récupere le resto choisi
 app.get('/resto/:id', (req, res) => {
   var db = req.db;
   Resto.findById(req.params.id, 'borough cuisine', function (errors, resto) {
@@ -61,7 +71,7 @@ app.get('/resto/:id', (req, res) => {
   })
 })
 
-// Update un resto
+// Modification d'un restaurant
 app.put('/restos/:id', (req, res) => {
   var db = req.db;
   Resto.findById(req.params.id, 'borough cuisine', function (error, resto) {
@@ -79,20 +89,4 @@ app.put('/restos/:id', (req, res) => {
     })
   })
 })
-
-// DELETE
-app.delete('/restos/:id', (req, res) => {
-  var db = req.db;
-  Resto.remove({
-    _id: req.params.id
-  }, function(err, resto){
-    if (err)
-      res.send(err)
-    res.send({
-      success: true
-    })
-  })
-})
-
-
 app.listen(8081)

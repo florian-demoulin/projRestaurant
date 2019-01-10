@@ -1,10 +1,10 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
-var RestoSchema = new Schema({
+var unResto = new Schema({
   borough: String,
   cuisine: String
 });
 
-var Resto = mongoose.model("Resto", RestoSchema);
+var Resto = mongoose.model("Resto", unResto);
 module.exports = Resto;
