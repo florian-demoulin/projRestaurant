@@ -3,15 +3,15 @@
 Projet développé par BEATINI Thomas - DEMOULIN Florian
 
 
- Lancement du serveur mongoDB : 
+<h2> Lancement du serveur mongoDB : </h2>
 mongod 
 
- Construit les artefacts à deployer ;
+<h2> Construit les artefacts à deployer : </h2>
 npm run build
 
- Installation des dépendances : 
+<h2> Installation des dépendances : </h2>
 npm install 
 
- Lance l'environnement de dev :
+<h2> Lance l'environnement de dev : </h2>
 npm run dev 
 
